@@ -8,6 +8,12 @@ export default function App() {
 
     const [dice, setDice] = React.useState(allNewDice())
     const [tenzies, setTenzies] = React.useState(false)
+    const [countTurns, setCountTurns] = React.useState(0)
+    const [bestScore, setBestScore] = React.useState(
+        parseInt(JSON.parse(localStorage.getItem("best-score"))) || 0
+    )
+
+    const [firstGame, setFirstGame] = React.useState(true)
     
     React.useEffect(() => {
         const result = dice.every(die => {
@@ -17,6 +23,12 @@ export default function App() {
         })
         setTenzies(result)
     }, [dice])
+
+    React.useEffect(() => {
+        if(countTurns && firstGame){
+            setBestScore(countTurns)
+        }
+    }, [countTurns])
 
     function generateNewDie() {
         return {
@@ -38,12 +50,19 @@ export default function App() {
         if(tenzies) {
           setTenzies(false)
           setDice(allNewDice())
+          setCountTurns(0)
+          setFirstGame(false)
+          if(countTurns < bestScore){
+            localStorage.setItem("best-score", JSON.stringify(countTurns))
+            setBestScore(countTurns)
+          }
         } else {
           setDice(oldDice => oldDice.map(die => {
               return die.isHeld ? 
                   die :
                   generateNewDie()
           }))
+          setCountTurns(countTurns + 1)
         }
     }
     
@@ -79,6 +98,10 @@ export default function App() {
             >
                 {tenzies ? "New Game" : "Roll"}
             </button>
+            <div className="stats-div">
+                <p>High Score: {bestScore}</p>
+                <p>Number of rolls: {countTurns}</p>
+            </div>
         </main>
     )
 }

@@ -13,7 +13,7 @@ main {
   margin-left:auto;
   margin-right:auto;
   background-color: #F5F5F5;
-  height: 400px;
+  height: 500px;
   max-width: 800px;
   border-radius: 5px;
   padding: 20px;
@@ -70,4 +70,10 @@ main {
 
 .roll-dice:active {
   box-shadow: inset 5px 5px 10px -3px rgba(0, 0, 0, 0.7);
+}
+
+.stats-div {
+  width:500px;
+  display:flex;
+  justify-content: space-between;
 }
